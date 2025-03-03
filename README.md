@@ -58,7 +58,3 @@ python telegram_bot.py
 - `templates/` - HTML шаблоны
 - `static/` - Статические файлы (CSS, JS)
 - `resumes/` - Папка для хранения загруженных резюме
-
-## Лицензия
-
-MIT 
