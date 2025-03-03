@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Добавление новой вакансии</h2>
+        <a href="{{ url_for('vacancies') }}" class="btn btn-secondary">Назад к списку</a>
+    </div>
+
+    <form method="POST" class="card">
+        <div class="card-body">
+            <div class="mb-3">
+                <label for="title" class="form-label">Название вакансии</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Описание</label>
+                <textarea class="form-control" id="description" name="description" rows="10" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="status" class="form-label">Статус</label>
+                <select class="form-select" id="status" name="status">
+                    <option value="Открыта">Открыта</option>
+                    <option value="В работе">В работе</option>
+                    <option value="Закрыта">Закрыта</option>
+                </select>
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Добавить вакансию</button>
+            </div>
+        </div>
+    </form>
+</div>
+{% endblock %} 
