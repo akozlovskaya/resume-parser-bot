@@ -55,7 +55,7 @@ class AdvancedResumeParser:
         
         # Dictionary of specializations and keywords
         self.specializations = {
-            'QA': ['qa', 'quality assurance', 'тестировщик', 'тестирование', 'qc', 'quality control'],
+            'QA': ['qa', 'quality assurance', 'qa engineer', 'qa automation', 'qa tester', 'qa testing', 'qa control', 'qa assurance', 'qa assurance engineer', 'qa assurance tester', 'qa assurance automation', 'qa assurance testing', 'тестировщик', 'тестирование', 'quality control'],
             'Python': ['python', 'django', 'flask', 'fastapi', 'pytest'],
             'Java': ['java', 'spring', 'hibernate', 'maven'],
             'Frontend': ['javascript', 'react', 'vue', 'angular', 'frontend', 'фронтенд'],
@@ -63,9 +63,9 @@ class AdvancedResumeParser:
             'DevOps': ['devops', 'docker', 'kubernetes', 'ci/cd', 'jenkins'],
             'Android': ['android', 'kotlin', 'mobile'],
             'iOS': ['ios', 'swift', 'objective-c'],
-            'Data Science': ['data science', 'data scientist', 'machine learning', 'ml', 'ai', 'искусственный интеллект'],
-            'Business Analyst': ['business analyst', 'бизнес-аналитик', 'ba', 'аналитик', 'анализ требований'],
-            'System Analyst': ['system analyst', 'системный аналитик', 'sa', 'системный архитектор'],
+            'Data Science': ['data science', 'data scientist', 'machine learning', 'ml engineer', 'nlp', 'sklearn', 'scikit-learn', 'pytorch'],
+            'Business Analyst': ['business analyst', 'бизнес-аналитик', 'аналитик', 'анализ требований'],
+            'System Analyst': ['system analyst', 'системный аналитик', 'системный архитектор'],
             'Analyst': ['analyst', 'аналитик', 'data analyst', 'data analysis'],
             'Product Manager': ['product manager', 'продакт-менеджер', 'продукт-менеджер', 'управление продуктом', 'product owner'],
             'Project Manager': ['project manager', 'проектный менеджер', 'управление проектами', 'pmbok', 'scrum', 'agile', 'канбан'],
@@ -123,6 +123,10 @@ class AdvancedResumeParser:
 
     def extract_name(self, text: str) -> Optional[str]:
         """Extracts name from text using Natasha and Spacy."""
+
+        # for hh.ru resumes
+        if "Желаемая должность и зарплата" in text:
+            return text.split("\n")[0]
         # Try Spacy first
         try:
             doc_spacy = self.nlp(' . '.join(text[:100].split('\n')))  # Analyze first 100 characters

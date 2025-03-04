@@ -3,7 +3,7 @@ from app import app, db
 
 def clean_database():
     print("Текущая директория:", os.getcwd())
-    db_path = 'recruiter.db'
+    db_path = 'instance/recruiter.db'
     
     # Проверяем, существует ли файл
     if os.path.exists(db_path):
