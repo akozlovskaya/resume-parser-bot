@@ -1,22 +1,93 @@
 {% extends "base.html" %}
 
+{% block title %}Главная - Resume Parser Bot{% endblock %}
+
 {% block content %}
-<div class="row">
-    <div class="col-md-6">
+<div class="row align-items-center min-vh-75">
+    <div class="col-lg-6">
+        <h1 class="display-4 mb-4">Умный парсер резюме</h1>
+        <p class="lead mb-4">
+            Автоматизируйте процесс обработки резюме с помощью искусственного интеллекта.
+            Наш бот поможет вам быстро анализировать и систематизировать информацию о кандидатах.
+        </p>
+        <div class="d-flex gap-3">
+            <a href="{{ url_for('candidates') }}" class="btn btn-primary">
+                <i class="fas fa-users me-2"></i>Кандидаты
+            </a>
+            <a href="{{ url_for('vacancies') }}" class="btn btn-outline-primary">
+                <i class="fas fa-briefcase me-2"></i>Вакансии
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-6">
         <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Кандидаты</h5>
-                <p class="card-text">Управление базой кандидатов, их резюме и статусами.</p>
-                <a href="{{ url_for('candidates') }}" class="btn btn-primary">Перейти к кандидатам</a>
+            <div class="card-body p-4">
+                <h3 class="card-title mb-4">Основные возможности</h3>
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-robot text-primary me-3 fa-2x"></i>
+                        <div>
+                            <h5 class="mb-1">AI-анализ резюме</h5>
+                            <p class="mb-0 text-muted">Автоматическое извлечение ключевой информации</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-file-alt text-success me-3 fa-2x"></i>
+                        <div>
+                            <h5 class="mb-1">Поддержка форматов</h5>
+                            <p class="mb-0 text-muted">PDF и DOCX файлы</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-chart-line text-warning me-3 fa-2x"></i>
+                        <div>
+                            <h5 class="mb-1">Умная классификация</h5>
+                            <p class="mb-0 text-muted">Определение специализации и навыков</p>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-database text-info me-3 fa-2x"></i>
+                        <div>
+                            <h5 class="mb-1">База данных</h5>
+                            <p class="mb-0 text-muted">Удобное хранение и поиск информации</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Вакансии</h5>
-                <p class="card-text">Управление вакансиями и их статусами.</p>
-                <a href="{{ url_for('vacancies') }}" class="btn btn-primary">Перейти к вакансиям</a>
+</div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        <h2 class="text-center mb-4">Как это работает</h2>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-paper-plane text-primary fa-3x mb-3"></i>
+                        <h4>1. Отправка резюме</h4>
+                        <p>Отправьте резюме через Telegram бота</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-magic text-success fa-3x mb-3"></i>
+                        <h4>2. Автоматический анализ</h4>
+                        <p>AI извлекает всю необходимую информацию</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center">
+                        <i class="fas fa-check-circle text-warning fa-3x mb-3"></i>
+                        <h4>3. Готовый результат</h4>
+                        <p>Информация сохраняется в базе данных</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
