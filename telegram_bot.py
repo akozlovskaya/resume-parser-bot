@@ -119,7 +119,7 @@ async def handle_document(update: Update, context: ContextTypes.DEFAULT_TYPE):
                         email=resume_data['email'],
                         phone=resume_data['phone'],
                         resume_path=file_path,
-                        status='New from Telegram',
+                        status='Новый из Telegram',
                         specializations=','.join(resume_data['specializations']),
                         telegram_username=original_sender.username if original_sender else (
                             update.message.forward_sender_name if update.message.forward_sender_name else user.username

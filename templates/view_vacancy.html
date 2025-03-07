@@ -1,78 +1,130 @@
 {% extends "base.html" %}
 
+{% block title %}Просмотр вакансии - Resume Parser Bot{% endblock %}
+
 {% block content %}
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Вакансия: {{ vacancy.title }}</h2>
-        <div>
-            <a href="{{ url_for('edit_vacancy', id=vacancy.id) }}" class="btn btn-warning">Редактировать</a>
-            <a href="{{ url_for('vacancies') }}" class="btn btn-secondary">Назад к списку</a>
-        </div>
-    </div>
-
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">Основная информация</h5>
-            <div class="row">
-                <div class="col-md-6">
-                    <p><strong>Статус:</strong> 
-                        <span class="badge {% if vacancy.status == 'Открыта' %}bg-success{% elif vacancy.status == 'В работе' %}bg-warning{% else %}bg-secondary{% endif %}">
-                            {{ vacancy.status }}
-                        </span>
-                    </p>
-                    <p><strong>Дата создания:</strong> {{ vacancy.created_at.strftime('%d.%m.%Y') }}</p>
-                    <p><strong>Последнее обновление:</strong> {{ vacancy.updated_at.strftime('%d.%m.%Y') }}</p>
-                </div>
-                <div class="col-md-6">
-                    <p><strong>Количество кандидатов:</strong> {{ vacancy.candidates|length }}</p>
+<div class="row justify-content-center">
+    <div class="col-lg-10">
+        <div class="card">
+            <div class="card-header bg-transparent border-0">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="card-title mb-0">{{ vacancy.title }}</h3>
+                        <p class="text-muted mb-0">{{ vacancy.position }} в {{ vacancy.company }}</p>
+                    </div>
+                    <span class="badge {% if vacancy.status == 'Открыта' %}bg-success
+                                    {% elif vacancy.status == 'В работе' %}bg-warning
+                                    {% else %}bg-secondary{% endif %}">
+                        {{ vacancy.status }}
+                    </span>
                 </div>
             </div>
-        </div>
-    </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <!-- Основная информация -->
+                        <h5 class="mb-3 text-muted">Основная информация</h5>
+                        <div class="mb-4">
+                            <p><strong>Зарплата:</strong> 
+                                {% if vacancy.salary_min or vacancy.salary_max %}
+                                    {{ vacancy.salary_min if vacancy.salary_min else 'от 0' }} - 
+                                    {{ vacancy.salary_max if vacancy.salary_max else 'не указано' }} ₽
+                                {% else %}
+                                    Не указана
+                                {% endif %}
+                            </p>
+                            <p><strong>Требуемые навыки:</strong> {{ vacancy.skills }}</p>
+                            <p><strong>Требования:</strong> {{ vacancy.requirements }}</p>
+                        </div>
 
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">Описание вакансии</h5>
-            <div class="description">
-                {{ vacancy.description|nl2br }}
+                        <!-- Условия работы -->
+                        <h5 class="mb-3 text-muted">Условия работы</h5>
+                        <div class="mb-4">
+                            <p><strong>Занятость по времени:</strong> {{ vacancy.employment_time.replace(',', ', ') }}</p>
+                            <p><strong>Тип занятости:</strong> {{ vacancy.employment_type.replace(',', ', ') }}</p>
+                            <p><strong>Оформление:</strong> {{ vacancy.contract_type.replace(',', ', ') }}</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <!-- Кандидаты -->
+                        <div class="card">
+                            <div class="card-header bg-transparent border-0">
+                                <h5 class="card-title mb-0">Кандидаты</h5>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST" action="{{ url_for('update_vacancy_candidates', id=vacancy.id) }}">
+                                    <div class="mb-3">
+                                        <label class="form-label">Выберите кандидатов</label>
+                                        <div class="list-group">
+                                            {% for candidate in all_candidates %}
+                                            <div class="list-group-item">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" 
+                                                           name="candidates" value="{{ candidate.id }}" 
+                                                           id="candidate_{{ candidate.id }}"
+                                                           {% if candidate in vacancy.candidates %}checked{% endif %}>
+                                                    <label class="form-check-label" for="candidate_{{ candidate.id }}">
+                                                        {{ candidate.name }}
+                                                        <small class="text-muted d-block">{{ candidate.specializations }}</small>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">
+                                        <i class="fas fa-save me-2"></i>Сохранить изменения
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title">Кандидаты</h5>
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Имя</th>
-                            <th>Email</th>
-                            <th>Статус</th>
-                            <th>Действия</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for candidate in vacancy.candidates %}
-                        <tr>
-                            <td>{{ candidate.name }}</td>
-                            <td>{{ candidate.email }}</td>
-                            <td>
-                                <span class="badge {% if candidate.status == 'Новый' %}bg-success{% elif candidate.status == 'В работе' %}bg-warning{% else %}bg-secondary{% endif %}">
-                                    {{ candidate.status }}
-                                </span>
-                            </td>
-                            <td>
-                                <a href="{{ url_for('view_candidate', id=candidate.id) }}" class="btn btn-sm btn-info">
-                                    Просмотр
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+            <div class="card-footer bg-transparent border-0">
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('edit_vacancy', id=vacancy.id) }}" class="btn btn-warning">
+                        <i class="fas fa-edit me-2"></i>Редактировать
+                    </a>
+                    <a href="{{ url_for('vacancies') }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Назад
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.list-group-item {
+    border-left: none;
+    border-right: none;
+}
+
+.list-group-item:first-child {
+    border-top: none;
+}
+
+.list-group-item:last-child {
+    border-bottom: none;
+}
+
+.form-check {
+    margin: 0;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.form-check:hover {
+    background-color: rgba(255, 141, 199, 0.1);
+}
+
+.form-check-input:checked {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+}
+</style>
 {% endblock %} 

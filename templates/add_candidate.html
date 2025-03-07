@@ -80,10 +80,25 @@
                             </div>
                         </div>
 
+                        <div class="col-md-6">
+                            <label for="vacancy" class="form-label">Вакансия</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="fas fa-briefcase"></i>
+                                </span>
+                                <select class="form-select" id="vacancy" name="vacancy_id">
+                                    <option value="">Не привязан к вакансии</option>
+                                    {% for vacancy in vacancies %}
+                                    <option value="{{ vacancy.id }}">{{ vacancy.title }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
                         <!-- Специализации -->
                         <div class="col-12 mt-4">
                             <h5 class="mb-3 text-muted">Специализации</h5>
-                            <div class="row g-3">
+                            <div class="row g-3 px-3">
                                 {% for spec in ['QA', 'Python', 'Java', 'Frontend', 'Backend', 'DevOps', 
                                                'Android', 'iOS', 'Data Science', 'Business Analyst', 
                                                'System Analyst', 'Analyst', 'Product Manager', 

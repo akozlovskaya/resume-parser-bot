@@ -68,19 +68,26 @@ def candidates():
 @app.route('/candidate/add', methods=['GET', 'POST'])
 def add_candidate():
     if request.method == 'POST':
+        vacancy_id = request.form.get('vacancy_id')
+        vacancy_id = int(vacancy_id) if vacancy_id else None
+        
         candidate = Candidate(
             name=request.form['name'],
             email=request.form['email'],
             phone=request.form['phone'],
             status=request.form['status'],
-            source=request.form['source']
+            source=request.form['source'],
+            vacancy_id=vacancy_id
         )
         candidate.set_specializations(request.form.getlist('specializations'))
         db.session.add(candidate)
         db.session.commit()
         flash('Кандидат успешно добавлен', 'success')
         return redirect(url_for('candidates'))
-    return render_template('add_candidate.html')
+    
+    # Получаем список вакансий для выпадающего списка
+    vacancies = Vacancy.query.filter_by(status='Открыта').all()
+    return render_template('add_candidate.html', vacancies=vacancies)
 
 @app.route('/candidate/<int:id>')
 def view_candidate(id):
@@ -119,17 +126,17 @@ def vacancies():
 def add_vacancy():
     if request.method == 'POST':
         vacancy = Vacancy(
-            title=request.form['title'],
-            position=request.form['position'],
-            company=request.form['company'],
-            salary_min=request.form.get('salary_min'),
-            salary_max=request.form.get('salary_max'),
-            skills=request.form['skills'],
-            requirements=request.form['requirements'],
+            title=request.form.get('title', ''),
+            position=request.form.get('position', ''),
+            company=request.form.get('company', ''),
+            salary_min=request.form.get('salary_min', type=int) if request.form.get('salary_min') else None,
+            salary_max=request.form.get('salary_max', type=int) if request.form.get('salary_max') else None,
+            skills=request.form.get('skills', ''),
+            requirements=request.form.get('requirements', ''),
             employment_time=','.join(request.form.getlist('employment_time')),
             employment_type=','.join(request.form.getlist('employment_type')),
             contract_type=','.join(request.form.getlist('contract_type')),
-            status=request.form['status']
+            status=request.form.get('status', 'Открыта')
         )
         db.session.add(vacancy)
         db.session.commit()
@@ -140,7 +147,8 @@ def add_vacancy():
 @app.route('/vacancy/<int:id>')
 def view_vacancy(id):
     vacancy = Vacancy.query.get_or_404(id)
-    return render_template('view_vacancy.html', vacancy=vacancy)
+    all_candidates = Candidate.query.all()
+    return render_template('view_vacancy.html', vacancy=vacancy, all_candidates=all_candidates)
 
 @app.route('/vacancy/<int:id>/edit', methods=['GET', 'POST'])
 def edit_vacancy(id):
@@ -162,10 +170,21 @@ def edit_vacancy(id):
         return redirect(url_for('vacancies'))
     return render_template('edit_vacancy.html', vacancy=vacancy)
 
-@app.route('/vacancy/<int:id>/candidates')
-def candidates_for_vacancy(id):
+@app.route('/vacancy/<int:id>/candidates', methods=['POST'])
+def update_vacancy_candidates(id):
     vacancy = Vacancy.query.get_or_404(id)
-    return render_template('candidates.html', candidates=vacancy.candidates, vacancy=vacancy)
+    selected_candidates = request.form.getlist('candidates')
+    
+    # Обновляем связь с кандидатами
+    for candidate in Candidate.query.all():
+        if str(candidate.id) in selected_candidates:
+            candidate.vacancy_id = vacancy.id
+        elif candidate.vacancy_id == vacancy.id:
+            candidate.vacancy_id = None
+    
+    db.session.commit()
+    flash('Список кандидатов успешно обновлен', 'success')
+    return redirect(url_for('view_vacancy', id=id))
 
 # Создаем базу данных при запуске приложения
 with app.app_context():
