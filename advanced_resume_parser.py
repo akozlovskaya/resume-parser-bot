@@ -124,45 +124,42 @@ class AdvancedResumeParser:
     def extract_name(self, text: str) -> Optional[str]:
         """Extracts name from text using Natasha and Spacy."""
 
+        extracted_name = None
         # for hh.ru resumes
         if "Желаемая должность и зарплата" in text:
-            return text.split("\n")[0]
-        # Try Spacy first
-        try:
-            doc_spacy = self.nlp(' . '.join(text[:100].split('\n')))  # Analyze first 100 characters
-            for ent in doc_spacy.ents:
-                if ent.label_ == "PER":
-                    return ent.text
-        except Exception as e:
-            logger.warning(f"Error processing name with Spacy: {e}")
+            extracted_name = text.split("\n")[0]
+            # return text.split("\n")[0]
+
+        if extracted_name is None:
+            # Try Spacy first
+            try:
+                doc_spacy = self.nlp(' . '.join(text[:100].split('\n')))  # Analyze first 100 characters
+                for ent in doc_spacy.ents:
+                    if ent.label_ == "PER":
+                        extracted_name = ent.text
+                        break
+            except Exception as e:
+                logger.warning(f"Error processing name with Spacy: {e}")
         
 
-        # # If Spacy didn't work, try Natasha
-        # try:
-        #     doc = Doc(text)
-        #     doc.segment(self.segmenter)
-        #     doc.tag_ner(self.ner_tagger)
+        if extracted_name is None:
+            try:
+                # Split text into lines and find first non-empty line
+                lines = [line.strip() for line in text.split('\n') if line.strip()]
+                if lines:
+                    # Take first two words from first non-empty line
+                    words = lines[0].split()
+                    if len(words) >= 2:
+                        extracted_name = " ".join(words[:2])
+            except Exception as e:
+                logger.warning(f"Error extracting name from text: {e}")
+        
+        if extracted_name is not None:
+            extracted_name = extracted_name.lower()
+            make_title = lambda x: x.group(0).title()
+            extracted_name = re.sub(r"[а-яА-Яa-zA-Z]+", make_title, extracted_name)
             
-        #     # Look for first name in text
-        #     for span in doc.spans:
-        #         if span.type == 'PER':
-        #             return span.text
-        # except Exception as e:
-        #     logger.warning(f"Error processing name with Natasha: {e}")
-        
-        # If no name found through NLP, take first words from document
-        try:
-            # Split text into lines and find first non-empty line
-            lines = [line.strip() for line in text.split('\n') if line.strip()]
-            if lines:
-                # Take first two words from first non-empty line
-                words = lines[0].split()
-                if len(words) >= 2:
-                    return " ".join(words[:2])
-        except Exception as e:
-            logger.warning(f"Error extracting name from text: {e}")
-        
-        return None
+        return extracted_name
 
     def extract_phone_numbers(self, text: str) -> List[str]:
         """Extracts phone numbers from text."""
