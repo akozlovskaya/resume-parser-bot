@@ -40,6 +40,15 @@ class Candidate(db.Model):
 class Vacancy(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), nullable=False)
+    position = db.Column(db.String(100))
+    company = db.Column(db.String(100))
+    salary_min = db.Column(db.Integer)
+    salary_max = db.Column(db.Integer)
+    skills = db.Column(db.String(200))
+    requirements = db.Column(db.Text)
+    employment_time = db.Column(db.String(200))
+    employment_type = db.Column(db.String(200))
+    contract_type = db.Column(db.String(200))
     description = db.Column(db.Text)
     status = db.Column(db.String(50), default='Открыта')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
@@ -111,7 +120,15 @@ def add_vacancy():
     if request.method == 'POST':
         vacancy = Vacancy(
             title=request.form['title'],
-            description=request.form['description'],
+            position=request.form['position'],
+            company=request.form['company'],
+            salary_min=request.form.get('salary_min'),
+            salary_max=request.form.get('salary_max'),
+            skills=request.form['skills'],
+            requirements=request.form['requirements'],
+            employment_time=','.join(request.form.getlist('employment_time')),
+            employment_type=','.join(request.form.getlist('employment_type')),
+            contract_type=','.join(request.form.getlist('contract_type')),
             status=request.form['status']
         )
         db.session.add(vacancy)
@@ -130,7 +147,15 @@ def edit_vacancy(id):
     vacancy = Vacancy.query.get_or_404(id)
     if request.method == 'POST':
         vacancy.title = request.form['title']
-        vacancy.description = request.form['description']
+        vacancy.position = request.form['position']
+        vacancy.company = request.form['company']
+        vacancy.salary_min = request.form.get('salary_min')
+        vacancy.salary_max = request.form.get('salary_max')
+        vacancy.skills = request.form['skills']
+        vacancy.requirements = request.form['requirements']
+        vacancy.employment_time = ','.join(request.form.getlist('employment_time'))
+        vacancy.employment_type = ','.join(request.form.getlist('employment_type'))
+        vacancy.contract_type = ','.join(request.form.getlist('contract_type'))
         vacancy.status = request.form['status']
         db.session.commit()
         flash('Вакансия успешно обновлена', 'success')

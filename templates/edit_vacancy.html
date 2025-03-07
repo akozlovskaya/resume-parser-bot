@@ -9,27 +9,141 @@
 
     <form method="POST" class="card">
         <div class="card-body">
-            <div class="mb-3">
-                <label for="title" class="form-label">Название вакансии</label>
-                <input type="text" class="form-control" id="title" name="title" value="{{ vacancy.title }}" required>
-            </div>
+            <div class="row g-3">
+                <!-- Основная информация -->
+                <div class="col-12">
+                    <h5 class="mb-3 text-muted">Основная информация</h5>
+                </div>
 
-            <div class="mb-3">
-                <label for="description" class="form-label">Описание</label>
-                <textarea class="form-control" id="description" name="description" rows="10" required>{{ vacancy.description }}</textarea>
-            </div>
+                <div class="col-md-6">
+                    <label for="title" class="form-label">Название вакансии</label>
+                    <input type="text" class="form-control" id="title" name="title" value="{{ vacancy.title }}" required>
+                </div>
 
-            <div class="mb-3">
-                <label for="status" class="form-label">Статус</label>
-                <select class="form-select" id="status" name="status">
-                    <option value="Открыта" {% if vacancy.status == 'Открыта' %}selected{% endif %}>Открыта</option>
-                    <option value="В работе" {% if vacancy.status == 'В работе' %}selected{% endif %}>В работе</option>
-                    <option value="Закрыта" {% if vacancy.status == 'Закрыта' %}selected{% endif %}>Закрыта</option>
-                </select>
-            </div>
+                <div class="col-md-6">
+                    <label for="position" class="form-label">Должность</label>
+                    <input type="text" class="form-control" id="position" name="position" value="{{ vacancy.position }}" required>
+                </div>
 
-            <div class="text-end">
-                <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+                <div class="col-md-6">
+                    <label for="company" class="form-label">Компания</label>
+                    <input type="text" class="form-control" id="company" name="company" value="{{ vacancy.company }}" required>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="salary" class="form-label">Вилка зарплаты</label>
+                    <div class="input-group">
+                        <input type="number" class="form-control" id="salary_min" name="salary_min" 
+                               value="{{ vacancy.salary_min }}" placeholder="От">
+                        <span class="input-group-text">-</span>
+                        <input type="number" class="form-control" id="salary_max" name="salary_max" 
+                               value="{{ vacancy.salary_max }}" placeholder="До">
+                    </div>
+                </div>
+
+                <!-- Требования -->
+                <div class="col-12 mt-4">
+                    <h5 class="mb-3 text-muted">Требования</h5>
+                </div>
+
+                <div class="col-12">
+                    <label for="skills" class="form-label">Требуемые навыки</label>
+                    <textarea class="form-control" id="skills" name="skills" rows="3" required>{{ vacancy.skills }}</textarea>
+                </div>
+
+                <div class="col-12">
+                    <label for="requirements" class="form-label">Требования (опыт работы и т.д.)</label>
+                    <textarea class="form-control" id="requirements" name="requirements" rows="3" required>{{ vacancy.requirements }}</textarea>
+                </div>
+
+                <!-- Занятость -->
+                <div class="col-12 mt-4">
+                    <h5 class="mb-3 text-muted">Занятость</h5>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Занятость по времени</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="employment_time" value="fulltime" 
+                               id="fulltime" {% if 'fulltime' in vacancy.employment_time %}checked{% endif %}>
+                        <label class="form-check-label" for="fulltime">Полный день</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="employment_time" value="20h" 
+                               id="20h" {% if '20h' in vacancy.employment_time %}checked{% endif %}>
+                        <label class="form-check-label" for="20h">20 часов</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="employment_time" value="30h" 
+                               id="30h" {% if '30h' in vacancy.employment_time %}checked{% endif %}>
+                        <label class="form-check-label" for="30h">30 часов</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Тип занятости</label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="employment_type" value="main" 
+                               id="main" {% if 'main' in vacancy.employment_type %}checked{% endif %}>
+                        <label class="form-check-label" for="main">Основная работа</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="employment_type" value="parttime" 
+                               id="parttime" {% if 'parttime' in vacancy.employment_type %}checked{% endif %}>
+                        <label class="form-check-label" for="parttime">Частичная занятость</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="employment_type" value="project" 
+                               id="project" {% if 'project' in vacancy.employment_type %}checked{% endif %}>
+                        <label class="form-check-label" for="project">Проектная работа</label>
+                    </div>
+                </div>
+
+                <!-- Оформление -->
+                <div class="col-12 mt-4">
+                    <h5 class="mb-3 text-muted">Оформление</h5>
+                </div>
+
+                <div class="col-12">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="contract_type" value="self_employed" 
+                               id="self_employed" {% if 'self_employed' in vacancy.contract_type %}checked{% endif %}>
+                        <label class="form-check-label" for="self_employed">Самозанятость</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="contract_type" value="ip" 
+                               id="ip" {% if 'ip' in vacancy.contract_type %}checked{% endif %}>
+                        <label class="form-check-label" for="ip">ИП</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="contract_type" value="labor" 
+                               id="labor" {% if 'labor' in vacancy.contract_type %}checked{% endif %}>
+                        <label class="form-check-label" for="labor">Трудовой договор</label>
+                    </div>
+                </div>
+
+                <!-- Статус -->
+                <div class="col-12 mt-4">
+                    <h5 class="mb-3 text-muted">Статус вакансии</h5>
+                </div>
+
+                <div class="col-md-6">
+                    <label for="status" class="form-label">Статус</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="Открыта" {% if vacancy.status == 'Открыта' %}selected{% endif %}>Открыта</option>
+                        <option value="В работе" {% if vacancy.status == 'В работе' %}selected{% endif %}>В работе</option>
+                        <option value="Закрыта" {% if vacancy.status == 'Закрыта' %}selected{% endif %}>Закрыта</option>
+                    </select>
+                </div>
+
+                <!-- Кнопки -->
+                <div class="col-12 mt-4">
+                    <div class="d-flex gap-2 justify-content-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-2"></i>Сохранить изменения
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </form>
