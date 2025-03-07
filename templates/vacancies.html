@@ -18,7 +18,11 @@
         <div class="card h-100">
             <div class="card-header bg-transparent border-0">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">{{ vacancy.title }}</h5>
+                    <h5 class="card-title mb-0">
+                        <a href="{{ url_for('view_vacancy', id=vacancy.id) }}" class="text-decoration-none text-dark">
+                            {{ vacancy.title }}
+                        </a>
+                    </h5>
                     <span class="badge {% if vacancy.status == 'Открыта' %}bg-success
                                     {% elif vacancy.status == 'В работе' %}bg-warning
                                     {% else %}bg-secondary{% endif %}">
@@ -50,11 +54,6 @@
                         <i class="fas fa-users me-1"></i>Кандидаты
                     </a>
                     <div class="btn-group">
-                        <a href="{{ url_for('view_vacancy', id=vacancy.id) }}" 
-                           class="btn btn-sm btn-outline-primary" 
-                           title="Просмотр">
-                            <i class="fas fa-eye"></i>
-                        </a>
                         <a href="{{ url_for('edit_vacancy', id=vacancy.id) }}" 
                            class="btn btn-sm btn-outline-warning" 
                            title="Редактировать">
@@ -90,6 +89,10 @@
 
 .btn-group .btn i {
     font-size: 0.875rem;
+}
+
+.card-title a:hover {
+    color: var(--primary-color) !important;
 }
 </style>
 {% endblock %} 
