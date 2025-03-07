@@ -137,18 +137,18 @@ class AdvancedResumeParser:
             logger.warning(f"Error processing name with Spacy: {e}")
         
 
-        # If Spacy didn't work, try Natasha
-        try:
-            doc = Doc(text)
-            doc.segment(self.segmenter)
-            doc.tag_ner(self.ner_tagger)
+        # # If Spacy didn't work, try Natasha
+        # try:
+        #     doc = Doc(text)
+        #     doc.segment(self.segmenter)
+        #     doc.tag_ner(self.ner_tagger)
             
-            # Look for first name in text
-            for span in doc.spans:
-                if span.type == 'PER':
-                    return span.text
-        except Exception as e:
-            logger.warning(f"Error processing name with Natasha: {e}")
+        #     # Look for first name in text
+        #     for span in doc.spans:
+        #         if span.type == 'PER':
+        #             return span.text
+        # except Exception as e:
+        #     logger.warning(f"Error processing name with Natasha: {e}")
         
         # If no name found through NLP, take first words from document
         try:
