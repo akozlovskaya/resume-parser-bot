@@ -15,7 +15,7 @@ Telegram бот для автоматической обработки резю�
 
 1. Клонируйте репозиторий:
 ```bash
-git clone https://github.com/your-username/resume-parser-bot.git
+git clone https://github.com/akozlovskaya/resume-parser-bot.git
 cd resume-parser-bot
 ```
 
@@ -31,7 +31,12 @@ venv\Scripts\activate     # для Windows
 pip install -r requirements.txt
 ```
 
-4. Создайте файл `.env` и добавьте необходимые переменные окружения:
+4. Установите языковую модель для spaCy:
+```bash
+python -m spacy download ru_core_news_sm
+```
+
+5. Создайте файл `.env` в корневой директории проекта и добавьте в него необходимые переменные окружения:
 ```
 TELEGRAM_BOT_TOKEN=your_bot_token
 ALLOWED_TELEGRAM_USERNAMES=username1,username2

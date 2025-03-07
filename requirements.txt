@@ -10,7 +10,7 @@ python-docx==0.8.11
 PyPDF2==3.0.1
 spacy==3.7.2
 phonenumbers==8.13.30
-python-magic-bin==0.4.14
+python-magic==0.4.27
 natasha==1.6.0
 gpt4all==2.0.2
 yargy==0.16.0
