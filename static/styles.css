@@ -1,4 +1,4 @@
-:root {
+/* :root {
     --primary-color: #2563eb;
     --primary-hover: #1d4ed8;
     --secondary-color: #64748b;
@@ -6,6 +6,20 @@
     --text-color: #1e293b;
     --border-color: #e2e8f0;
     --card-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+} */
+
+:root {
+    --primary-color: #8C634A;
+    --primary-hover: #71513c;
+    --secondary-color: #553d30;
+    /* --secondary-color: #3E2D23; */
+    --background-color: #F2E4DF;
+    --text-color: #6B4F3F;
+    --border-color: #F2E4DF;
+    --card-color: #D9C1B4;        
+    --list-color: #F2E4DF; 
+    --table-color: #F5F0ED;
+    --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1); /* Тень для карточек */
 }
 
 body {
@@ -19,7 +33,7 @@ body {
 
 /* Navbar styles */
 .navbar {
-    background-color: white;
+    background-color: var(--background-color);
     box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
     padding: 1rem 0;
 }
@@ -27,7 +41,7 @@ body {
 .navbar-brand {
     font-weight: 600;
     font-size: 1.25rem;
-    color: var(--text-color);
+    color: var(--secondary-color);
 }
 
 .nav-link {
@@ -42,7 +56,7 @@ body {
 
 /* Card styles */
 .card {
-    background-color: white;
+    background-color: var(--card-color);
     border: none;
     border-radius: 0.75rem;
     box-shadow: var(--card-shadow);
@@ -55,16 +69,48 @@ body {
 }
 
 .card-header {
-    background-color: transparent;
+    background-color: #D9C1B4;
     border-bottom: 1px solid var(--border-color);
     padding: 1.25rem;
 }
 
 .card-body {
+    background-color: var(--card-color);
     padding: 1.25rem;
 }
 
 .card-footer {
+    background-color: transparent;
+    border-top: 1px solid var(--border-color);
+    padding: 1.25rem;
+}
+
+/* Card-list styles */
+.card-list {
+    background-color: var(--list-color);
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: var(--card-shadow);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-list:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+.card-list-header {
+    background-color: var(--list-color);
+    border-bottom: 1px solid var(--border-color);
+    padding: 1.25rem;
+}
+
+.card-list-body {
+    background-color: var(--list-color);
+    padding: 1.25rem;
+}
+
+.card-list-footer {
     background-color: transparent;
     border-top: 1px solid var(--border-color);
     padding: 1.25rem;
@@ -98,6 +144,26 @@ body {
     border-color: var(--primary-color);
 }
 
+.btn-secondary {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--secondary-hover);
+    border-color: var(--secondary-hover);
+}
+
+.btn-outline-secondary {
+    color: var(--secondary-color);
+    border-color: var(--secondary-color);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--secondary-hover);
+    border-color: var(--secondary-hover);
+}
+
 /* Form styles */
 .form-control, .form-select {
     border-radius: 0.5rem;
@@ -126,30 +192,47 @@ body {
 
 /* Footer styles */
 .footer {
-    background-color: white;
-    border-top: 1px solid var(--border-color);
+    background-color: var(--background-color);
+    border-top: 1px solid var(--background-color);
     margin-top: auto;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
 }
 
 /* Table styles */
 .table {
     margin-bottom: 0;
+    background-color: var(--table-color);
+    border-radius: 0.75rem;
+    border-color: var(--card-color);
 }
 
 .table th {
     font-weight: 600;
     color: var(--secondary-color);
     border-bottom-width: 1px;
+    background-color: var(--table-color);
+    border-color: var(--card-color);
+    border-radius: 0.75rem;
 }
 
 .table td {
     vertical-align: middle;
+    background-color: var(--table-color);
+    border-color: var(--card-color);
 }
+
+.table tbody tr:last-child td {
+    border-bottom: none;
+}
+
 
 /* List group styles */
 .list-group-item {
     border: none;
     padding: 1rem;
+    background-color: var(--list-color); 
 }
 
 .list-group-item:first-child {
@@ -205,15 +288,153 @@ body {
     color: var(--text-color);
 }
 
+.form-check-label:hover {
+    border-color: transparent;
+}
+
 .form-check {
     margin-bottom: 0.8em;
+}
+.form-check:hover {
+    border-color: transparent;
 }
 
 /* Стили для контейнера специализаций */
 .specializations-container {
     padding: 1rem;
-    background-color: white;
+    background-color: #D9C1B4;
     border-radius: 0.5rem;
     box-shadow: var(--card-shadow);
     margin-bottom: 1rem;
+}
+
+/* Стили для выпадающего меню с чекбоксами */
+.dropdown-menu {
+    padding: 0.5rem 0;
+    border: 1px solid var(--border-color);
+    box-shadow: var(--card-shadow);
+}
+
+.dropdown-item {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dropdown-item:hover {
+    background-color: var(--secondary-color);
+    color: var(--primary-color);
+}
+
+/* Скрываем стандартный чекбокс */
+.dropdown-item input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #8C634A; /* Теплый коричневый цвет границы */
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    margin-right: 8px;
+}
+
+/* Стиль для отмеченного чекбокса */
+.dropdown-item input[type="checkbox"]:checked {
+    background-color: #8C634A; /* Теплый коричневый фон */
+    border-color: #8C634A;
+}
+
+/* Галочка Font Awesome */
+.dropdown-item input[type="checkbox"]:checked::after {
+    font-family: "Font Awesome 5 Free"; /* Используем Font Awesome */
+    content: "\f00c"; /* Код иконки галочки */
+    font-weight: 900; /* Solid стиль */
+    font-size: 12px;
+    color: white; /* Белый цвет галочки */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* .dropdown-item input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+} */
+
+/* Стили для ссылок */
+a {
+    color: var(--primary-color);
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    color: var(--primary-hover);
+}
+
+/* Стили для иконок */
+.text-primary {
+    color: var(--text-color) !important;
+}
+
+.text-dark {
+    color: var(--secondary-color) !important;
+}
+
+.text-white {
+    color: var(--table-color);
+}
+
+.text-background {
+    color: var(--background-color);
+}
+
+/* Стили для заголовков */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+}
+
+/* Стили для активных элементов */
+.active {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+/* Кастомные классы для фона */
+
+
+.bg-custom-brown {
+    background-color: #8C634A; /* Теплый коричневый */
+}
+
+.bg-custom-beige {
+    background-color: #A69185; /* Приглушенный бежевый */
+}
+
+.bg-custom-light-beige {
+    background-color: #D9C1B4; /* Светлый бежевый */
+}
+
+.bg-custom-soft-beige {
+    background-color: #F2E4DF; /* Очень светлый бежевый */
+}
+
+.bg-custom-dark-brown {
+    background-color: #6B4F3F; /* Темный коричневый */
+}
+
+.bg-custom-medium-beige {
+    background-color: #BFA18F; /* Средний бежево-коричневый */
+}
+
+.bg-custom-chocolate {
+    background-color: #3E2D23; /* Шоколадный */
+}
+
+.bg-custom-warm-white {
+    background-color: #F5F0ED; /* Теплый белый */
 }

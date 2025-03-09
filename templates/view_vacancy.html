@@ -12,9 +12,7 @@
                         <h3 class="card-title mb-0">{{ vacancy.title }}</h3>
                         <p class="text-muted mb-0">{{ vacancy.position }} в {{ vacancy.company }}</p>
                     </div>
-                    <span class="badge {% if vacancy.status == 'Открыта' %}bg-success
-                                    {% elif vacancy.status == 'В работе' %}bg-warning
-                                    {% else %}bg-secondary{% endif %}">
+                    <span class="badge bg-custom-beige">
                         {{ vacancy.status }}
                     </span>
                 </div>
@@ -47,11 +45,11 @@
                     </div>
                     <div class="col-md-4">
                         <!-- Кандидаты -->
-                        <div class="card">
-                            <div class="card-header bg-transparent border-0">
-                                <h5 class="card-title mb-0">Кандидаты</h5>
+                        <div class="card-list">
+                            <div class="card-list-header bg-transparent border-0">
+                                <h5 class="card-list-title mb-0">Кандидаты</h5>
                             </div>
-                            <div class="card-body">
+                            <div class="card-list-body">
                                 <form method="POST" action="{{ url_for('update_vacancy_candidates', id=vacancy.id) }}">
                                     <div class="mb-3">
                                         <label class="form-label">Выберите кандидатов</label>
@@ -83,7 +81,7 @@
             </div>
             <div class="card-footer bg-transparent border-0">
                 <div class="d-flex gap-2">
-                    <a href="{{ url_for('edit_vacancy', id=vacancy.id) }}" class="btn btn-warning">
+                    <a href="{{ url_for('edit_vacancy', id=vacancy.id) }}" class="btn btn-secondary">
                         <i class="fas fa-edit me-2"></i>Редактировать
                     </a>
                     <a href="{{ url_for('vacancies') }}" class="btn btn-outline-secondary">

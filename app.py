@@ -12,6 +12,12 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Инициализируем базу данных
 db = SQLAlchemy(app)
 
+# Ассоциативная таблица для связи многие ко многим
+candidate_vacancy = db.Table('candidate_vacancy',
+    db.Column('candidate_id', db.Integer, db.ForeignKey('candidate.id'), primary_key=True),
+    db.Column('vacancy_id', db.Integer, db.ForeignKey('vacancy.id'), primary_key=True)
+)
+
 # Модель кандидата
 class Candidate(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -19,13 +25,16 @@ class Candidate(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     phone = db.Column(db.String(20))
     resume_path = db.Column(db.String(200))
-    status = db.Column(db.String(50), default='Новый')
+    status = db.Column(db.String(50), default='New')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    vacancy_id = db.Column(db.Integer, db.ForeignKey('vacancy.id'))
-    source = db.Column(db.String(50), default='Другое')  # Telegram или другой источник
+    source = db.Column(db.String(50), default='Other')  # Telegram или другой источник
     specializations = db.Column(db.String(200))  # Хранение специализаций через запятую
     telegram_username = db.Column(db.String(100))  # Добавляем поле для username в Telegram
+    vacancies = db.relationship(
+        'Vacancy', secondary=candidate_vacancy,
+        backref=db.backref('candidates', lazy=True)
+    )
 
     def set_specializations(self, specs_list):
         if specs_list:
@@ -50,10 +59,9 @@ class Vacancy(db.Model):
     employment_type = db.Column(db.String(200))
     contract_type = db.Column(db.String(200))
     description = db.Column(db.Text)
-    status = db.Column(db.String(50), default='Открыта')
+    status = db.Column(db.String(50), default='Open')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    candidates = db.relationship('Candidate', backref='vacancy', lazy=True)
 
 @app.route('/')
 def index():
@@ -68,16 +76,13 @@ def candidates():
 @app.route('/candidate/add', methods=['GET', 'POST'])
 def add_candidate():
     if request.method == 'POST':
-        vacancy_id = request.form.get('vacancy_id')
-        vacancy_id = int(vacancy_id) if vacancy_id else None
         
         candidate = Candidate(
             name=request.form['name'],
             email=request.form['email'],
             phone=request.form['phone'],
             status=request.form['status'],
-            source=request.form['source'],
-            vacancy_id=vacancy_id
+            source=request.form['source']
         )
         candidate.set_specializations(request.form.getlist('specializations'))
         db.session.add(candidate)
@@ -178,9 +183,10 @@ def update_vacancy_candidates(id):
     # Обновляем связь с кандидатами
     for candidate in Candidate.query.all():
         if str(candidate.id) in selected_candidates:
-            candidate.vacancy_id = vacancy.id
-        elif candidate.vacancy_id == vacancy.id:
-            candidate.vacancy_id = None
+            if vacancy not in candidate.vacancies:
+                candidate.vacancies.append(vacancy)
+        elif vacancy in candidate.vacancies:
+            candidate.vacancies.remove(vacancy)
     
     db.session.commit()
     flash('Список кандидатов успешно обновлен', 'success')
